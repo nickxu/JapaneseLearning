@@ -1,0 +1,246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>日语学习</title>
+    <meta http-equiv="charset" content="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="author" content="Runix Inc."/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <style type="text/css">
+        @font-face {
+            font-family: Test;
+            src: url('MS Mincho.TTF');//字体路径
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            display: block;
+            height: 100%;
+            width: 100%;
+        }
+
+        #word_block, #spell_block {
+            display: block;
+            width: 95%;
+            color: white;
+            font-family: "MS Mincho";
+            text-align: center;
+            margin: 0 auto;
+            vertical-align: middle;
+        }
+
+        #word_block {
+            height: 65%;
+        }
+
+        #spell_block {
+            height: 15%;
+        }
+
+        .word {
+            background-color: darkcyan;
+        }
+
+        .spell {
+            background-color: darkgreen;
+        }
+
+        #control_block {
+            display: block;
+            width: 95%;
+            height: 20%;
+            text-align: center;
+            margin: 0 auto;
+            padding: 10% auto
+        }
+
+        #pause_start {
+            display: inline-block;
+            height: 80%;
+            width: 100%;
+            margin: 0 auto;
+            background-color: darkorange;
+            font-size: 4rem;
+            font-family: "Droid Sans", "Microsoft YaHei UI";
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div id="spell_block" class="word" onclick="clickBlockEvent()">
+</div>
+<div id="word_block" class="word" onclick="clickBlockEvent()">
+</div>
+<div id="control_block">
+    <input type="button" id="pause_start" class="toStart" value="开始" onclick="clickButtonEvent()">
+</div>
+</body>
+<script type="text/javascript">
+    // 五十音图学习
+    // 日语平假名和片假名
+    var words = ['あ', 'い', 'う', 'え', 'お', 'ア', 'イ', 'ウ', 'エ', 'オ', 'か', 'き', 'く', 'け', 'こ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'さ', 'し', 'す', 'せ', 'そ', 'サ', 'シ', 'ス', 'セ', 'ソ', 'た', 'ち', 'つ', 'て', 'と', 'タ', 'チ', 'ツ', 'テ', 'ト', 'な', 'に', 'ぬ', 'ね', 'の', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'は', 'ひ', 'ふ', 'へ', 'ほ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ', 'ま', 'み', 'む', 'め', 'も', 'マ', 'ミ', 'ム', 'メ', 'モ', 'や', 'い', 'ゆ', 'え', 'よ', 'ヤ', 'イ', 'ユ', 'エ', 'ヨ', 'ら', 'り', 'る', 'れ', 'ろ', 'ラ', 'リ', 'ル', 'レ', 'ロ', 'わ', 'い', 'う', 'え', 'お', 'ワ', 'イ', 'ウ', 'エ', 'ヲ', 'ん', 'ン', 'が', 'ぎ', 'ぐ', 'げ', 'ご', 'ガ', 'ギ', 'グ', 'ゲ', 'ゴ', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ', 'ザ', 'ジ', 'ズ', 'ゼ', 'ゾ', 'だ', 'ぢ', 'づ', 'で', 'ど', 'ダ', 'ヂ', 'ヅ', 'デ', 'ド', 'ば', 'び', 'ぶ', 'べ', 'ぼ', 'バ', 'ビ', 'ブ', 'ベ', 'ボ', 'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ', 'パ', 'ピ', 'プ', 'ペ', 'ポ', 'きゃ', 'きゅ', 'きょ', 'しゃ', 'しゅ', 'しょ', 'ちゃ', 'ちゅ', 'ちょ', 'にゃ', 'にゅ', 'にょ', 'ひゃ', 'ひゅ', 'ひょ', 'みゃ', 'みゅ', 'みょ', 'りゃ', 'りゅ', 'りょ', 'ぎゃ', 'ぎゅ', 'ぎょ', 'じゃ', 'じゅ', 'じょ', 'ぢゃ', 'ぢゅ', 'ぢょ', 'びゃ', 'びゅ', 'びょ', 'ぴゃ', 'ぴゅ', 'ぴょ', 'キャ', 'キュ', 'キョ', 'シャ', 'シュ', 'ショ', 'チャ', 'チュ', 'チョ', 'ニャ', 'ニュ', 'ニョ', 'ヒャ', 'ヒュ', 'ヒョ', 'ミャ', 'ミュ', 'ミョ', 'リャ', 'リュ', 'リョ', 'ギャ', 'ギュ', 'ギョ', 'ジャ', 'ジュ', 'ジョ', 'ヂャ', 'ヂュ', 'ヂョ', 'ビャ', 'ビュ', 'ビョ', 'ピャ', 'ピュ', 'ピョ'];
+    // 罗马音
+    var spells = ['a', 'i', 'u', 'e', 'o', 'a', 'i', 'u', 'e', 'o', 'ka', 'ki', 'ku', 'ke', 'ko', 'ka', 'ki', 'ku', 'ke', 'ko', 'sa', 'si', 'su', 'se', 'so', 'sa', 'si', 'su', 'se', 'so', 'ta', 'ci', 'cu', 'te', 'to', 'ta', 'ci', 'cu', 'te', 'to', 'na', 'ni', 'nu', 'ne', 'no', 'na', 'ni', 'nu', 'ne', 'no', 'ha', 'hi', 'hu', 'he', 'ho', 'ha', 'hi', 'hu', 'he', 'ho', 'ma', 'mi', 'mu', 'me', 'mo', 'ma', 'mi', 'mu', 'me', 'mo', 'ya', 'i', 'yu', 'e', 'yo', 'ya', 'i', 'yu', 'e', 'yo', 'ra', 'ri', 'ru', 're', 'ro', 'ra', 'ri', 'ru', 're', 'ro', 'wa', 'i', 'u', 'e', 'o', 'wa', 'i', 'u', 'e', 'o', 'n', 'n', 'ga', 'gi', 'gu', 'ge', 'go', 'ga', 'gi', 'gu', 'ge', 'go', 'za', 'zi', 'zu', 'ze', 'zo', 'za', 'zi', 'zu', 'ze', 'zo', 'da', 'di', 'du', 'de', 'do', 'da', 'di', 'du', 'de', 'do', 'ba', 'bi', 'bu', 'be', 'bo', 'ba', 'bi', 'bu', 'be', 'bo', 'pa', 'pi', 'pu', 'pe', 'po', 'pa', 'pi', 'pu', 'pe', 'po', 'kya', 'kyu', 'kyo', 'sya', 'syu', 'syo', 'cya', 'cyu', 'cyo', 'nya', 'nyu', 'nyo', 'hya', 'hyu', 'hyo', 'mya', 'myu', 'myo', 'rya', 'ryu', 'ryo', 'gya', 'gyu', 'gyo', 'zya', 'zyu', 'zyo', 'tya', 'tyu', 'tyo', 'bya', 'byu', 'byo', 'pya', 'pyu', 'pyo', 'kya', 'kyu', 'kyo', 'sya', 'syu', 'syo', 'tya', 'tyu', 'tyo', 'nya', 'nyu', 'nyo', 'hya', 'hyu', 'hyo', 'mya', 'myu', 'myo', 'rya', 'ryu', 'ryo', 'gya', 'gyu', 'gyo', 'zya', 'zyu', 'zyo', 'dya', 'dyu', 'dyo', 'bya', 'byu', 'byo', 'pya', 'pyu', 'pyo'];
+    // 下标组合
+    var randoms = [];
+    var prevRandoms = [];
+    // 运行状态
+    var running = false;
+    // 下标
+    var wordIndex = 0;
+
+    var wordsInterval;
+
+    var pingJiaMings = ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と', 'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ', 'ま', 'み', 'む', 'め', 'も', 'や', 'い', 'ゆ', 'え', 'よ', 'ら', 'り', 'る', 'れ', 'ろ', 'わ', 'い', 'う', 'え', 'お', 'ん'];
+    var pianJiaMings = ['ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'サ', 'シ', 'ス', 'セ', 'ソ', 'タ', 'チ', 'ツ', 'テ', 'ト', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ', 'マ', 'ミ', 'ム', 'メ', 'モ', 'ヤ', 'イ', 'ユ', 'エ', 'ヨ', 'ラ', 'リ', 'ル', 'レ', 'ロ', 'ワ', 'イ', 'ウ', 'エ', 'ヲ', 'ン'];
+    var
+
+    var changYins = [];
+    var cuYins = [];
+    var aoYins = [];
+
+
+
+    function showRandomWords() {
+        // 取得randoms数组，返回随机的索引位置，
+        // 找到该位置的值，并在randoms里面删除该值，在也就是words的索引值，从而获取words里面的值
+        // 按钮上显示还剩多少
+        // 当randoms里面没有数据的时候，填充数据
+        if (randoms.length == 0) {
+            fillRandoms();
+            prevRandoms.splice(0);
+        }
+
+        var randomIndex = parseInt(Math.random() * (randoms.length - 1) + "");
+        wordIndex = randoms[randomIndex];
+        randoms.splice(randomIndex, 1);
+
+        prevRandoms.push(wordIndex);
+
+        var wordBlock = document.getElementById("word_block");
+        changeStyle(wordBlock);
+
+        changeButtonText();
+    }
+
+    function changeStyle(wordBlock) {
+        var blockClassName, isSpellDisplay, wordBlockHeight, spellBlockHeight;
+        if (wordBlock.className == "spell") {
+            blockClassName = "spell";
+            isSpellDisplay = true;
+            changeBlockStyle(blockClassName, isSpellDisplay, wordBlockHeight, spellBlockHeight);
+        } else {
+            blockClassName = "word";
+            isSpellDisplay = false;
+            changeBlockStyle(blockClassName, isSpellDisplay, wordBlockHeight, spellBlockHeight);
+        }
+    }
+
+    function changeBlockStyle(blockClassName, isSpellDisplay, wordBlockHeight, spellBlockHeight) {
+        var word = words[wordIndex];
+        var spell = spells[wordIndex];
+
+        var wordBlock = document.getElementById("word_block");
+        wordBlock.innerText = word;
+        wordBlock.className = blockClassName;
+
+        var spellBlock = document.getElementById("spell_block");
+        spellBlock.className = blockClassName;
+
+        if (isSpellDisplay) {
+            spellBlock.innerText = spell;
+        } else {
+            spellBlock.innerText = "";
+        }
+
+        var wordFontPercentage = 0.9 / word.length;
+        switch (word.length) {
+            case 1:
+                wordFontPercentage = 0.9;
+                break;
+            case 2:
+                wordFontPercentage = 0.5;
+                break;
+            case 3:
+                wordFontPercentage = 0.4;
+                break;
+            default:
+                wordFontPercentage = 1 / word.length;
+                break;
+        }
+
+        if (wordBlock.offsetHeight > wordBlock.offsetWidth) {
+            wordBlock.style.fontSize = wordBlock.offsetWidth * wordFontPercentage + "px";
+            wordBlock.style.lineHeight = wordBlock.offsetHeight + "px";
+        } else {
+            wordBlock.style.fontSize = wordBlock.offsetHeight * wordFontPercentage + "px";
+            wordBlock.style.lineHeight = wordBlock.offsetHeight + "px";
+        }
+
+        spellBlock.style.fontSize = spellBlock.offsetHeight * 0.9 + "px";
+        spellBlock.style.lineHeight = spellBlock.offsetHeight + "px";
+    }
+
+    function changeButtonText() {
+        var pauseButton = document.getElementById("pause_start");
+        if (pauseButton.className == "toPause") {
+            pauseButton.value = "暂停[" + randoms.length + "]";
+        } else {
+            pauseButton.value = "开始[" + randoms.length + "]";
+        }
+    }
+
+    function fillRandoms() {
+        for (var i = 0; i < words.length; i++) {
+            randoms.push(i);
+        }
+    }
+
+    // 初始化
+    function initWordBlock() {
+        fillRandoms();
+
+        var wordBlock = document.getElementById("word_block");
+        changeStyle(wordBlock);
+
+        var pauseButton = document.getElementById("pause_start");
+        pauseButton.className = "toStart";
+        changeButtonText();
+
+        pauseButton.style.lineHeight = pauseButton.offsetHeight + "px";
+    }
+
+    // 点击单词块的效果
+    function clickBlockEvent() {
+        var wordBlock = document.getElementById("word_block");
+        wordBlock.className = wordBlock.className == "word" ? "spell" : "word";
+        changeStyle(wordBlock);
+    }
+
+    // 点击按钮的事件
+    function clickButtonEvent() {
+        var pauseButton = document.getElementById("pause_start");
+        if (!running) {
+            running = true;
+            pauseButton.className = "toPause";
+            showRandomWords();
+            wordsInterval = setInterval(showRandomWords, 4000)
+        } else {
+            running = false;
+            pauseButton.className = "toStart";
+            changeButtonText();
+            wordsInterval = clearInterval(wordsInterval)
+        }
+    }
+
+    initWordBlock();
+</script>
+</html>
